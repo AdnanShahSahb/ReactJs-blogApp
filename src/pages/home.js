@@ -7,11 +7,14 @@ import Modaling from "../comps/modal";
 const Home = (props) => {
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [modalForAll,setModalForAll]=useState(true);
+  const [modalForAll, setModalForAll] = useState(true);
 
   const postCollectionRef = collection(db, "posts/");
 
   const [postArray, setPostArray] = useState([]);
+
+  const [Loading, setLoading] = useState(true);
+
   // {
   //   date: "date",
   //   authorURL: "authorURL",
@@ -45,7 +48,7 @@ const Home = (props) => {
   //   id: "id4",
   // },
   const [readyToPass, setReadyToPass] = useState([]);
-  
+
 
   const deleteModal = async (specId) => {
     // console.log(specId);
@@ -61,7 +64,8 @@ const Home = (props) => {
       setPostArray(
         data.docs.map((thatData) => ({ ...thatData.data(), id: thatData.id }))
       );
-      
+      setLoading(false)
+
     };
 
     fetchingData();
@@ -76,22 +80,22 @@ const Home = (props) => {
   // console.log(props.accLoggedIn);
   // console.log(postArray);
 
-  const myPost_allPostFunc=(thatPost)=>{
+  const myPost_allPostFunc = (thatPost) => {
 
-    return(
-  
-  <Carding
-    deletingModal={deleteModal}
-    onClick={handleModal}
-    delBtnShow={modalForAll}
-    date={thatPost.date}
-    authorURL={thatPost.authorURL}
-    title={thatPost.title}
-    paras={thatPost.para}
-    author={thatPost.authorName}
-    postImgUrl={thatPost.postImgUrl}
-    id={thatPost.id}
-  />
+    return (
+
+      <Carding
+        deletingModal={deleteModal}
+        onClick={handleModal}
+        delBtnShow={modalForAll}
+        date={thatPost.date}
+        authorURL={thatPost.authorURL}
+        title={thatPost.title}
+        paras={thatPost.para}
+        author={thatPost.authorName}
+        postImgUrl={thatPost.postImgUrl}
+        id={thatPost.id}
+      />
     )
   }
 
@@ -100,8 +104,8 @@ const Home = (props) => {
     <>
 
       <div className="container">
-      
-      
+
+
         {modalOpen ? (
           <Modaling
             setOpenModal={setModalOpen}
@@ -114,45 +118,48 @@ const Home = (props) => {
         ) : (
           <>
 
-      <div className="btn-group text-center my-5">
-        <button type="button" className="btn btn-secondary active mr-3" onClick={()=>{setModalForAll(true)}}>
-          All Posts
-        </button>
-        <button type="button" className="btn btn-secondary mr-3 " onClick={()=>{setModalForAll(false)}}>
-          My Posts
-        </button>
-      </div>
+            <div className="btn-group text-center my-5">
+              <button type="button" className="btn btn-secondary active mr-3" onClick={() => { setModalForAll(true) }}>
+                All Posts
+              </button>
+              <button type="button" className="btn btn-secondary mr-3 " onClick={() => { setModalForAll(false) }}>
+                My Posts
+              </button>
+            </div>
 
-      {modalForAll?<h1 className="my-2">"All Posts"</h1>:<h1 className="my-2">"My Posts"</h1>}
-          <div className="row" id="parentOfCard">
-            
-            {postArray.map((thatPost) => {console.log();
+            {modalForAll ? <h1 className="my-2">"All Posts"</h1> : <h1 className="my-2">"My Posts"</h1>}
+            <div className="row" id="parentOfCard">
+
+              {postArray.map((thatPost) => {
+                console.log();
                 return (
                   <>
-                  <div className="col-sm-4" key={thatPost.id}>
-                  {modalForAll?myPost_allPostFunc(thatPost) :(props.accLoggedIn && thatPost.authorId === auth.currentUser.uid && myPost_allPostFunc(thatPost) )}
-                  </div>
+                    <div className="col-sm-4" key={thatPost.id}>
+                      {modalForAll ? myPost_allPostFunc(thatPost) : (props.accLoggedIn && thatPost.authorId === auth.currentUser.uid && myPost_allPostFunc(thatPost))}
+                    </div>
 
-                  
+
                   </>
                 );
-            })}
-          </div>
+              })}
+            </div>
           </>
 
         )}
+
+
+
+        {!props.accLoggedIn && !modalForAll && "You Need to Login First "}
+
+        {props.accLoggedIn && !modalForAll && document.getElementById("parentOfCard") && postArray.length === 0 && document.getElementById("parentOfCard").children.length === 0 && "Empty | Create to Add "}
+
+        {Loading && <>"Loading..." < br /></>}
         
+        {modalForAll && postArray.length === 0 && "No Post"}
 
 
-        {!props.accLoggedIn && !modalForAll && "You Need to Login First " }
-        
-        {props.accLoggedIn && !modalForAll  && document.getElementById("parentOfCard") && postArray.length===0 && document.getElementById("parentOfCard").children.length===0 && "Empty | Create to Add " }
-
-        {modalForAll && postArray.length===0 && "No Post" }
-
-      
       </div>
-      
+
     </>
   );
 };

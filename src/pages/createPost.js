@@ -52,7 +52,7 @@ const CreatePost = (props) => {
     
         }
         createPost();
-        navigating("/")
+        navigating("/blogApp")
         // console.log(auth.currentUser.displayName);
 
     
@@ -62,7 +62,7 @@ const CreatePost = (props) => {
 
     useEffect(()=>{
         if(!props.isAuth)
-        navigating("/")
+        navigating("/blogApp")
         console.log(props.isAuth);
     },[])
 
