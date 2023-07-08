@@ -56,7 +56,7 @@ const Navbar = (props) => {
 
         <div className="collapse navbar-collapse " id="navbarNavAltMarkup">
           <div className="navbar-nav w-100" >
-            <Link to="/blogApp" className="nav-item nav-link " href="#">
+            <Link to="/ReactJs-blogApp" className="nav-item nav-link " href="#">
               Home <span className="sr-only">(current)</span>
             </Link>
  
